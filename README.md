@@ -1,303 +1,299 @@
 # Erdős Problem 920
 
-A self-contained exposition of the resolution of **Erdős Problem 920** using a strengthened lower bound for off-diagonal Ramsey numbers.
+A self-contained exposition of the resolution of Erdős Problem 920 using a strengthened lower bound for off-diagonal Ramsey numbers.
 
-This repository contains the proof, quantitative consequences, and exploratory research notes related to the remaining logarithmic gap.
+This repository contains:
+
+* a complete proof of the Ramsey-to-chromatic transfer,
+* quantitative consequences,
+* upper and lower bounds for the relevant chromatic function,
+* an equivalent minimum-order formulation,
+* and a research appendix on the remaining logarithmic gap.
+
+## Problem Statement
+
+For fixed `k >= 3`, define `f_k(n)` to be the largest chromatic number of an `n`-vertex graph that does not contain a complete graph `K_k`.
+
+In symbols:
+
+```text
+f_k(n) = max chromatic number among all n-vertex K_k-free graphs
+```
+
+Erdős Problem 920 asks whether, for every fixed `k >= 4`, there exists a constant `c_k > 0` such that:
+
+```text
+f_k(n) >= constant_k *
+         n^(1 - 1/(k - 1)) *
+         (log n)^c_k
+```
+
+The manuscript gives an affirmative answer.
 
 ## Main Result
 
-For fixed (k \ge 3), define
+Using Bradač's strengthened lower bound for off-diagonal Ramsey numbers, the manuscript proves that for every fixed `k >= 3`:
 
-[
-f_k(n)
-======
+```text
+f_k(n) >= constant_k *
+         n^(1 - 1/(k - 1)) *
+         (log n)^(2(k - 2)/(k - 1))
+```
 
-\max\left{
-\chi(G):
-|V(G)|=n
-\text{ and }
-G \text{ is } K_k\text{-free}
-\right}.
-]
+for all sufficiently large integers `n`.
 
-Erdős Problem 920 asks whether, for every fixed (k \ge 4), there exists a constant (c_k>0) such that
+Therefore, Erdős Problem 920 is resolved affirmatively, and one may take:
 
-[
-f_k(n)
-\gg_k
-n^{1-\frac{1}{k-1}}
-(\log n)^{c_k}.
-]
+```text
+c_k = 2(k - 2)/(k - 1)
+```
 
-Using Bradač’s strengthened lower bound for off-diagonal Ramsey numbers,
+For `k = 4`, this becomes:
 
-[
-r(k,t)
-\gg_k
-\frac{t^{k-1}}{(\log t)^{2k-4}},
-]
-
-the project proves that
-
-[
-\boxed{
-f_k(n)
-\gg_k
-n^{1-\frac{1}{k-1}}
-(\log n)^{\frac{2(k-2)}{k-1}}
-}
-]
-
-for every fixed (k\ge 3) and all sufficiently large (n).
-
-Therefore, Erdős Problem 920 has an affirmative answer, with
-
-[
-\boxed{
-c_k=\frac{2(k-2)}{k-1}
-}.
-]
-
-For (k=4), this gives
-
-[
-f_4(n)
-\gg
-n^{2/3}(\log n)^{4/3}.
-]
-
----
+```text
+f_4(n) >= constant *
+         n^(2/3) *
+         (log n)^(4/3)
+```
 
 ## Core Idea
 
-The proof uses a finite Ramsey-to-chromatic transfer.
+The proof uses a direct transfer from Ramsey numbers to chromatic numbers.
 
-If
+Let `r(k, t)` be the smallest integer `N` such that every graph on `N` vertices contains either:
 
-[
-r(k,t)>n,
-]
+* a clique of size `k`, or
+* an independent set of size `t`.
 
-then there exists an (n)-vertex graph (G) containing neither a (K_k) nor an independent set of size (t). Hence
+If:
 
-[
-\alpha(G)\le t-1.
-]
+```text
+r(k, t) > n
+```
 
-Since every color class is independent,
+then there exists an `n`-vertex graph `G` containing neither a `K_k` nor an independent set of size `t`.
 
-[
-n\le \chi(G)\alpha(G),
-]
+Therefore:
 
-and therefore
+```text
+alpha(G) <= t - 1
+```
 
-[
-\chi(G)\ge
-\left\lceil
-\frac{n}{t-1}
-\right\rceil.
-]
+where `alpha(G)` is the independence number of `G`.
 
-Thus,
+Every color class in a proper coloring is independent, so:
 
-[
-f_k(n)\ge
-\left\lceil
-\frac{n}{t-1}
-\right\rceil.
-]
+```text
+n <= chromatic_number(G) * alpha(G)
+```
 
-The remaining step is to choose (t) by asymptotically inverting the Ramsey lower bound.
+and hence:
 
----
+```text
+chromatic_number(G) >= ceil(n / (t - 1))
+```
+
+Since `G` is `K_k`-free:
+
+```text
+f_k(n) >= ceil(n / (t - 1))
+```
+
+The rest of the proof consists of choosing `t` by asymptotically inverting a lower bound for `r(k, t)`.
 
 ## General Transfer Theorem
 
-Suppose that, for fixed (k),
+Suppose that for fixed `k` there are constants `a > 0`, `d > 1`, and `A >= 0` such that:
 
-[
-r(k,t)
-\ge
-a\frac{t^d}{(\log t)^A}
-]
+```text
+r(k, t) >= a * t^d / (log t)^A
+```
 
-for sufficiently large (t), where (d>1).
+for all sufficiently large `t`.
 
-Then
+Then:
 
-[
-f_k(n)
-\gg
-n^{1-\frac1d}
-(\log n)^{A/d}.
-]
+```text
+f_k(n) >= C *
+         n^(1 - 1/d) *
+         (log n)^(A/d)
+```
 
-Applying this with
+for some constant `C > 0` and all sufficiently large `n`.
 
-[
-d=k-1,
-\qquad
-A=2k-4,
-]
+Bradač's theorem gives:
 
-gives
+```text
+d = k - 1
+A = 2k - 4
+```
 
-[
-f_k(n)
-\gg_k
-n^{1-\frac{1}{k-1}}
-(\log n)^{\frac{2(k-2)}{k-1}}.
-]
+Substituting these values yields:
 
-The proof works for every sufficiently large integer (n); it does not require restricting to a sparse sequence of admissible graph orders.
+```text
+f_k(n) >= constant_k *
+         n^(1 - 1/(k - 1)) *
+         (log n)^(2(k - 2)/(k - 1))
+```
 
----
+## Exact Graph Orders
 
-## Current Bounds
+The argument produces a graph on exactly `n` vertices for every sufficiently large integer `n`.
 
-Let
+It does not require:
 
-[
-a_k=\frac{k-2}{k-1}.
-]
+* restricting to a sparse sequence of graph orders,
+* interpolating between special values of `n`,
+* or using an unstated padding argument.
 
-The established lower bound is
+## Current Logarithmic Frontier
 
-[
-f_k(n)
-\gg_k
-n^{a_k}(\log n)^{2a_k}.
-]
+Define:
 
-The classical Ajtai–Komlós–Szemerédi Ramsey upper bound gives the complementary estimate
+```text
+a_k = (k - 2)/(k - 1)
+```
 
-[
-f_k(n)
-\ll_k
-\frac{n^{a_k}}{(\log n)^{a_k}}.
-]
+The manuscript establishes the lower bound:
 
-Consequently,
+```text
+f_k(n) >= constant_k *
+         n^a_k *
+         (log n)^(2a_k)
+```
 
-[
-\frac{n^{a_k}}{(\log n)^{2a_k}}
-\ll_k
-f_k(n)
-\ll_k
-\frac{n^{a_k}}{(\log n)^{a_k}},
-]
+The classical Ajtai-Komlós-Szemerédi Ramsey bound gives the upper estimate:
 
-and in particular,
+```text
+f_k(n) <= constant_k *
+         n^a_k /
+         (log n)^a_k
+```
 
-[
-f_k(n)=n^{a_k+o(1)}.
-]
+Equivalently, the currently known range is:
 
-The polynomial exponent is settled. The remaining uncertainty is entirely polylogarithmic.
+```text
+constant_k *
+n^a_k /
+(log n)^(2a_k)
 
----
+<= f_k(n) <=
 
-## Equivalent Minimum-Order Formulation
+constant_k *
+n^a_k /
+(log n)^a_k
+```
 
-Define
+In particular:
 
-[
-h_k(q)
-======
+```text
+f_k(n) = n^(a_k + o(1))
+```
 
-\min\left{
-|V(G)|:
-G \text{ is } K_k\text{-free and }
-\chi(G)\ge q
-\right}.
-]
+The polynomial exponent is therefore settled.
 
-The known estimates imply
+The remaining uncertainty is entirely logarithmic.
 
-[
-q^{\frac{k-1}{k-2}}\log q
-\ll_k
-h_k(q)
-\ll_k
-q^{\frac{k-1}{k-2}}(\log q)^2.
-]
+## Equivalent Minimum-Order Problem
 
-The sharp endpoint problem is therefore equivalent to removing one logarithmic factor from the upper bound for (h_k(q)).
+Define `h_k(q)` as the smallest number of vertices in a `K_k`-free graph with chromatic number at least `q`.
 
----
+In words:
 
-## Open Problem
+```text
+h_k(q) = minimum order of a K_k-free graph
+         with chromatic number at least q
+```
 
-The original Erdős problem is resolved.
+The known estimates imply:
 
-The remaining problem is to determine the optimal logarithmic exponent in the growth of (f_k(n)).
+```text
+constant_k *
+q^((k - 1)/(k - 2)) *
+log q
 
-Equivalently, one seeks a bound of the form
+<= h_k(q) <=
 
-[
-f_k(n)
-\gg_k
-\left(\frac{n}{\log n}\right)^{\frac{k-2}{k-1}},
-]
+constant_k *
+q^((k - 1)/(k - 2)) *
+(log q)^2
+```
 
-or
+Thus the sharper endpoint problem is equivalent to removing one logarithmic factor from the upper bound for `h_k(q)`.
 
-[
-h_k(q)
-\ll_k
-q^{\frac{k-1}{k-2}}\log q.
-]
+## Remaining Open Problem
 
-For (k=4), this asks for a (K_4)-free graph on
+The original yes-or-no problem is solved.
 
-[
-O(q^3\log q)
-]
+The remaining research problem is to determine the correct logarithmic exponent.
 
-vertices with chromatic number
+The desired sharper bound is:
 
-[
-\Omega(q^2).
-]
+```text
+f_k(n) >= constant_k *
+         (n / log n)^((k - 2)/(k - 1))
+```
 
----
+Equivalently:
 
-## Research Directions
+```text
+h_k(q) <= constant_k *
+          q^((k - 1)/(k - 2)) *
+          log q
+```
 
-The accompanying research appendix investigates several possible approaches to the sharper logarithmic endpoint.
+For `k = 4`, this asks for a `K_4`-free graph with:
 
-### Proved components
+```text
+number of vertices = O(q^3 log q)
+chromatic number   = Omega(q^2)
+```
+
+## Research Appendix
+
+The appendix records a verification-controlled investigation of the sharper endpoint.
+
+Each item is explicitly labelled as one of:
+
+* proved,
+* refuted,
+* conditional,
+* experimental,
+* or open.
+
+None of the exploratory material is required for the main theorem.
+
+### Proved Components
 
 * Finite Ramsey-to-chromatic transfer
-* General asymptotic inversion theorem
+* General asymptotic inversion
 * Hereditary independent-set extraction
-* Dyadic coloring upper bound
-* Equivalent minimum-order formulation
+* Dyadic coloring argument
+* Minimum-order inversion
 * Quadratic collision certificate
 * Laminar zero-rectangle identity
 * Support-exact low-rank matrix construction
-* Shift-graph obstruction to bounded conflict refinement
+* Shift-graph obstruction
 
-### Refuted approaches
+### Refuted Approaches
 
-* Additive resource packing with the incorrect inequality direction
+* Additive resource packing with the wrong inequality direction
 * Constant-size conflict refinement of acyclic classes
-* Independent treatment of separate container budgets
-* A universal quadratic gain lower-tail estimate
-* A single dominant balanced-block dichotomy
+* Separate treatment of container budgets
+* Universal quadratic gain lower-tail estimates
+* Single dominant balanced-block arguments
 
-### Conditional or open approaches
+### Conditional or Open Directions
 
-* Regular-spread phase model for (k=4)
+* Regular-spread phase model for `k = 4`
 * Multi-block phase-moment estimates
-* Aggregate line-energy control across disjoint color classes
-* Higher-order convex or semidefinite certificates
-* Modified algebraic constructions with shared exceptional choices
+* Aggregate line-energy control
+* Higher-order convex certificates
+* Semidefinite certificates
+* Modified algebraic constructions
+* Direct quadratic collision bounds
 
----
-
-## Repository Structure
+## Suggested Repository Structure
 
 ```text
 .
@@ -317,69 +313,65 @@ The accompanying research appendix investigates several possible approaches to t
 └── LICENSE
 ```
 
-The exact structure may be adjusted depending on whether the repository contains only the manuscript or also includes computational experiments and formal verification files.
-
----
-
 ## Formalization
 
 The elementary logical core of the proof is short:
 
-[
-n<r(k,t)
-\Longrightarrow
-\exists G,\quad
-|V(G)|=n,\quad
-K_k\nsubseteq G,\quad
-\alpha(G)<t,
-]
+```text
+n < r(k, t)
 
-followed by
+implies that there exists a graph G such that:
 
-[
-n\le \chi(G)\alpha(G)<\chi(G)t.
-]
+|V(G)| = n
+G is K_k-free
+alpha(G) < t
+```
 
-A Lean formalization can therefore treat Bradač’s Ramsey theorem as the only deep imported result and kernel-check the complete transfer argument.
+Then:
 
----
+```text
+n <= chromatic_number(G) * alpha(G)
+```
 
-## Status and Trust Boundary
+so:
 
-The repository distinguishes carefully between established results and exploratory research.
+```text
+chromatic_number(G) > n / t
+```
 
-* The Ramsey-to-chromatic transfer and asymptotic inversion are proved in the manuscript.
-* The off-diagonal Ramsey lower bound is imported from Bradač’s work.
-* The Ramsey upper bound is imported from Ajtai, Komlós, and Szemerédi.
-* The main resolution does not depend on the exploratory appendices.
-* Experimental observations are not presented as asymptotic proofs.
-* Conditional constructions are explicitly labelled as conditional.
-* Refuted conjectures are retained to document failed approaches and prevent their accidental reuse.
+A Lean formalization could therefore isolate Bradač's Ramsey theorem as the only deep imported result and kernel-check the entire transfer argument.
 
----
+## Trust Boundary
+
+The manuscript carefully separates proved statements from imported and exploratory material.
+
+* The Ramsey-to-chromatic transfer is proved in the manuscript.
+* The asymptotic inversion is proved in the manuscript.
+* The chromatic upper bound is derived in the manuscript.
+* Bradač's off-diagonal Ramsey lower bound is imported.
+* The Ajtai-Komlós-Szemerédi Ramsey upper bound is imported.
+* The exploratory appendices are not used in the proof of the main result.
+* Experimental observations are not presented as asymptotic theorems.
+* Refuted conjectures are retained to document failed approaches.
 
 ## Citation
 
-When referencing this work, please cite the manuscript as:
-
 ```bibtex
 @misc{lua2026erdos920,
-  author       = {Moses Lua},
-  title        = {Erdős Problem 920 from an Off-Diagonal Ramsey Bound},
-  year         = {2026},
-  month        = {July},
-  note         = {A complete proof, quantitative consequences, and a research appendix on the remaining logarithmic gap}
+  author = {Moses Lua},
+  title = {Erdos Problem 920 from an Off-Diagonal Ramsey Bound},
+  year = {2026},
+  month = {July},
+  note = {A complete proof, quantitative consequences, and a research appendix on the remaining logarithmic gap}
 }
 ```
 
-A repository-specific URL or archival identifier can be added once available.
-
----
+Add the repository URL, DOI, or archival identifier once available.
 
 ## References
 
 1. M. Ajtai, J. Komlós, and E. Szemerédi,
-   *A note on Ramsey numbers*, Journal of Combinatorial Theory, Series A, 29 (1980), 354–360.
+   *A note on Ramsey numbers*, Journal of Combinatorial Theory, Series A, 29 (1980), 354-360.
 
 2. D. Bradač,
    *Off-diagonal Ramsey numbers*, arXiv preprint, 2026.
@@ -388,33 +380,27 @@ A repository-specific URL or archival identifier can be added once available.
    *Problems and results in chromatic graph theory*, in *Proof Techniques in Graph Theory*, Academic Press, 1969.
 
 4. J. E. Graver and J. Yackel,
-   *Some graph theoretic results associated with Ramsey’s theorem*, Journal of Combinatorial Theory, 4 (1968), 125–175.
+   *Some graph theoretic results associated with Ramsey's theorem*, Journal of Combinatorial Theory, 4 (1968), 125-175.
 
 5. S. Mattheus and J. Verstraete,
-   *The asymptotics of (r(4,t))*, Annals of Mathematics, 199 (2024), 919–941.
-
----
+   *The asymptotics of r(4, t)*, Annals of Mathematics, 199 (2024), 919-941.
 
 ## Author
 
-**Moses Lua**
-
----
+Moses Lua
 
 ## License
 
-Add the license appropriate for the intended use of the manuscript and source files.
+Choose a license based on the intended use.
 
-For example:
+For the manuscript:
 
 ```text
-CC BY 4.0
+Creative Commons Attribution 4.0 International
 ```
 
-for the manuscript, or
+For accompanying software or experiments:
 
 ```text
 MIT License
 ```
-
-for accompanying software and computational code.
